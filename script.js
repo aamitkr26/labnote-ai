@@ -170,3 +170,37 @@ Object.values(inputs).forEach(input => {
 
 // Initialize
 init();
+
+
+// -------- EXPORT MARKDOWN --------
+document.getElementById("export-md-btn").onclick = () => {
+  if (!currentNoteId) return;
+
+  const note = notes.find(n => n.id === currentNoteId);
+  if (!note) return;
+
+  let md = `# ${note.title}\n\n`;
+
+  md += `## Objective\n${note.objective || ""}\n\n`;
+  md += `## Materials\n${note.materials || ""}\n\n`;
+  md += `## Procedure\n${note.procedure || ""}\n\n`;
+  md += `## Observations\n${note.observations || ""}\n\n`;
+  md += `## Results\n${note.results || ""}\n\n`;
+  md += `## Conclusion\n${note.conclusion || ""}\n\n`;
+  md += `## Notes / Errors\n${note.notes || ""}\n\n`;
+
+  const blob = new Blob([md], { type: "text/markdown" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${note.title.replace(/\s+/g, "_")}.md`;
+  a.click();
+
+  URL.revokeObjectURL(url);
+};
+
+// -------- EXPORT PDF --------
+document.getElementById("export-pdf-btn").onclick = () => {
+  window.print();
+};
