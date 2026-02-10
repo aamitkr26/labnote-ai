@@ -5,6 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab Notebook</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .section-label-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .section-label-container label {
+            margin-bottom: 0;
+        }
+        .ai-btn {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            background-color: #6c5ce7;
+            color: white;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .ai-btn:hover {
+            background-color: #5b4cc4;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -35,37 +59,58 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="note-objective">Objective</label>
+                    <div class="section-label-container">
+                        <label for="note-objective">Objective</label>
+                        <button class="ai-btn" data-section="objective">AI Assist</button>
+                    </div>
                     <textarea id="note-objective" placeholder="What is the purpose of this experiment?" class="note-input"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="note-materials">Materials</label>
+                    <div class="section-label-container">
+                        <label for="note-materials">Materials</label>
+                        <button class="ai-btn" data-section="materials">AI Assist</button>
+                    </div>
                     <textarea id="note-materials" placeholder="List materials and equipment used." class="note-input"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="note-procedure">Procedure</label>
+                    <div class="section-label-container">
+                        <label for="note-procedure">Procedure</label>
+                        <button class="ai-btn" data-section="procedure">AI Assist</button>
+                    </div>
                     <textarea id="note-procedure" placeholder="Step-by-step procedure." class="note-input"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="note-observations">Observations</label>
+                    <div class="section-label-container">
+                        <label for="note-observations">Observations</label>
+                        <button class="ai-btn" data-section="observations">AI Assist</button>
+                    </div>
                     <textarea id="note-observations" placeholder="Record your observations here." class="note-input"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="note-results">Results</label>
+                    <div class="section-label-container">
+                        <label for="note-results">Results</label>
+                        <button class="ai-btn" data-section="results">AI Assist</button>
+                    </div>
                     <textarea id="note-results" placeholder="Record your results / data here." class="note-input"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="note-conclusion">Conclusion</label>
+                    <div class="section-label-container">
+                        <label for="note-conclusion">Conclusion</label>
+                        <button class="ai-btn" data-section="conclusion">AI Assist</button>
+                    </div>
                     <textarea id="note-conclusion" placeholder="What can be concluded from the results?" class="note-input"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="note-notes">Notes / Errors</label>
+                    <div class="section-label-container">
+                        <label for="note-notes">Notes / Errors</label>
+                        <button class="ai-btn" data-section="notes">AI Assist</button>
+                    </div>
                     <textarea id="note-notes" placeholder="Any additional notes or errors encountered." class="note-input"></textarea>
                 </div>
             </div>
