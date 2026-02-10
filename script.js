@@ -301,6 +301,72 @@ aiApplyBtn.addEventListener('click', () => {
 });
 
 
+// -------- SETTINGS --------
+const settingsView = document.getElementById('settings-view');
+const settingsBtn = document.getElementById('settings-btn');
+const settingsBackBtn = document.getElementById('settings-back-btn');
+const apiKeyInput = document.getElementById('api-key-input');
+const saveApiKeyBtn = document.getElementById('save-api-key-btn');
+const clearApiKeyBtn = document.getElementById('clear-api-key-btn');
+
+// Open Settings
+function openSettings() {
+    listView.classList.remove('active');
+    listView.classList.add('hidden');
+    editorView.classList.remove('active');
+    editorView.classList.add('hidden');
+
+    settingsView.classList.remove('hidden');
+    settingsView.classList.add('active');
+
+    // Load existing key
+    const existingKey = localStorage.getItem('openrouter_api_key');
+    if (existingKey) {
+        apiKeyInput.value = existingKey;
+    } else {
+        apiKeyInput.value = '';
+    }
+}
+
+// Close Settings (Return to List)
+function closeSettings() {
+    settingsView.classList.remove('active');
+    settingsView.classList.add('hidden');
+
+    // Default return to list view
+    listView.classList.remove('hidden');
+    listView.classList.add('active');
+
+    // If we were editing a note, we could return there, but for simplicity
+    // we return to the list. The user can just click the note again.
+    currentNoteId = null;
+}
+
+// Save API Key
+function saveApiKey() {
+    const key = apiKeyInput.value.trim();
+    if (key) {
+        localStorage.setItem('openrouter_api_key', key);
+        alert('API key saved.');
+    } else {
+        alert('Please enter an API key.');
+    }
+}
+
+// Clear API Key
+function clearApiKey() {
+    localStorage.removeItem('openrouter_api_key');
+    apiKeyInput.value = '';
+    alert('API key removed.');
+}
+
+// Event Listeners for Settings
+settingsBtn.addEventListener('click', openSettings);
+settingsBackBtn.addEventListener('click', closeSettings);
+saveApiKeyBtn.addEventListener('click', saveApiKey);
+clearApiKeyBtn.addEventListener('click', clearApiKey);
+
+
 // -------- EXPORT MARKDOWN --------
 document.getElementById("export-md-btn").onclick = () => {
   if (!currentNoteId) return;
