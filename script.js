@@ -194,7 +194,8 @@ document.getElementById("export-md-btn").onclick = () => {
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = `${note.title.replace(/\s+/g, "_")}.md`;
+  const safeTitle = note.title ? note.title.replace(/\s+/g, "_") : "lab_note";
+a.download = `${safeTitle}.md`;
   a.click();
 
   URL.revokeObjectURL(url);
