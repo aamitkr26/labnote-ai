@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Notebook</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- List View -->
+        <div id="note-list-view" class="view active">
+            <header>
+                <h1>Lab Notebook</h1>
+                <button id="new-note-btn" class="primary-btn">+ New Note</button>
+            </header>
+            <div id="notes-list" class="notes-container">
+                <!-- Notes will be injected here by JS -->
+                <p class="empty-state">No notes yet. Create one to get started.</p>
+            </div>
+        </div>
+
+        <!-- Editor View -->
+        <div id="editor-view" class="view hidden">
+            <header class="editor-header">
+                <button id="back-btn" class="secondary-btn">← Back</button>
+                <button id="delete-btn" class="danger-btn">Delete</button>
+            </header>
+            <div class="editor-content">
+                <div class="form-group">
+                    <label for="note-title">Title</label>
+                    <input type="text" id="note-title" placeholder="Experiment Title" class="note-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="note-objective">Objective</label>
+                    <textarea id="note-objective" placeholder="What is the purpose of this experiment?" class="note-input"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="note-materials">Materials</label>
+                    <textarea id="note-materials" placeholder="List materials and equipment used." class="note-input"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="note-procedure">Procedure</label>
+                    <textarea id="note-procedure" placeholder="Step-by-step procedure." class="note-input"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="note-observations">Observations</label>
+                    <textarea id="note-observations" placeholder="Record your observations here." class="note-input"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="note-results">Results</label>
+                    <textarea id="note-results" placeholder="Record your results / data here." class="note-input"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="note-conclusion">Conclusion</label>
+                    <textarea id="note-conclusion" placeholder="What can be concluded from the results?" class="note-input"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="note-notes">Notes / Errors</label>
+                    <textarea id="note-notes" placeholder="Any additional notes or errors encountered." class="note-input"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
