@@ -171,6 +171,201 @@ Object.values(inputs).forEach(input => {
 // Initialize
 init();
 
+// -------- AI ASSIST --------
+const aiModal = document.getElementById('ai-modal');
+const aiPrompt = document.getElementById('ai-prompt');
+const aiGenerateBtn = document.getElementById('ai-generate-btn');
+const aiApplyBtn = document.getElementById('ai-apply-btn');
+const aiCloseBtn = aiModal.querySelector('.secondary-btn');
+const aiContextCheckboxes = aiModal.querySelectorAll('input[type="checkbox"]');
+
+let currentAISection = null;
+
+// Open AI Modal
+function openAIModal(section) {
+    currentAISection = section;
+    aiModal.style.display = 'block';
+    aiPrompt.value = ''; // Clear previous prompt/response
+    aiContextCheckboxes.forEach(cb => cb.checked = false); // Reset checkboxes
+    aiGenerateBtn.disabled = false;
+    aiGenerateBtn.textContent = 'Generate';
+}
+
+// Close AI Modal
+function closeAIModal() {
+    aiModal.style.display = 'none';
+    currentAISection = null;
+    aiPrompt.value = '';
+}
+
+// Attach event listeners to AI buttons
+document.querySelectorAll('.ai-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const section = e.target.getAttribute('data-section');
+        openAIModal(section);
+    });
+});
+
+// Override close button behavior
+aiCloseBtn.onclick = (e) => {
+    e.preventDefault();
+    closeAIModal();
+};
+
+// Generate Response
+aiGenerateBtn.addEventListener('click', async () => {
+    const promptText = aiPrompt.value.trim();
+    if (!promptText) {
+        alert('Please enter a prompt.');
+        return;
+    }
+
+    const apiKey = localStorage.getItem('openrouter_api_key');
+    if (!apiKey) {
+        alert('OpenRouter API key not found in localStorage (key: "openrouter_api_key").');
+        return;
+    }
+
+    // Build Context
+    let contextText = '';
+    aiContextCheckboxes.forEach(cb => {
+        if (cb.checked) {
+            const sectionName = cb.value; // e.g., 'objective'
+            const sectionContent = inputs[sectionName] ? inputs[sectionName].value : '';
+            if (sectionContent) {
+                contextText += `${sectionName.toUpperCase()}:\n${sectionContent}\n\n`;
+            }
+        }
+    });
+
+    // Build Full Prompt
+    const fullPrompt = `You are a lab assistant.
+Task: ${promptText}
+
+Context:
+${contextText}`;
+
+    // Show Loading State
+    aiGenerateBtn.disabled = true;
+    aiGenerateBtn.textContent = 'Generating...';
+
+    try {
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'gpt-4o-mini',
+                messages: [{ role: 'user', content: fullPrompt }]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`API Error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const aiText = data.choices[0].message.content;
+
+        // Display Response
+        aiPrompt.value = aiText;
+
+    } catch (error) {
+        console.error(error);
+        alert('Failed to generate response: ' + error.message);
+    } finally {
+        aiGenerateBtn.disabled = false;
+        aiGenerateBtn.textContent = 'Generate';
+    }
+});
+
+// Apply Response
+aiApplyBtn.addEventListener('click', () => {
+    if (!currentAISection || !inputs[currentAISection]) return;
+
+    const responseText = aiPrompt.value;
+    if (!responseText) return;
+
+    // Append to existing content (with a newline if not empty)
+    const currentContent = inputs[currentAISection].value;
+    inputs[currentAISection].value = currentContent
+        ? currentContent + '\n' + responseText
+        : responseText;
+
+    // Trigger input event to autosave
+    inputs[currentAISection].dispatchEvent(new Event('input'));
+
+    closeAIModal();
+});
+
+
+// -------- SETTINGS --------
+const settingsView = document.getElementById('settings-view');
+const settingsBtn = document.getElementById('settings-btn');
+const settingsBackBtn = document.getElementById('settings-back-btn');
+const apiKeyInput = document.getElementById('api-key-input');
+const saveApiKeyBtn = document.getElementById('save-api-key-btn');
+const clearApiKeyBtn = document.getElementById('clear-api-key-btn');
+
+// Open Settings
+function openSettings() {
+    listView.classList.remove('active');
+    listView.classList.add('hidden');
+    editorView.classList.remove('active');
+    editorView.classList.add('hidden');
+
+    settingsView.classList.remove('hidden');
+    settingsView.classList.add('active');
+
+    // Load existing key
+    const existingKey = localStorage.getItem('openrouter_api_key');
+    if (existingKey) {
+        apiKeyInput.value = existingKey;
+    } else {
+        apiKeyInput.value = '';
+    }
+}
+
+// Close Settings (Return to List)
+function closeSettings() {
+    settingsView.classList.remove('active');
+    settingsView.classList.add('hidden');
+
+    // Default return to list view
+    listView.classList.remove('hidden');
+    listView.classList.add('active');
+
+    // If we were editing a note, we could return there, but for simplicity
+    // we return to the list. The user can just click the note again.
+    currentNoteId = null;
+}
+
+// Save API Key
+function saveApiKey() {
+    const key = apiKeyInput.value.trim();
+    if (key) {
+        localStorage.setItem('openrouter_api_key', key);
+        alert('API key saved.');
+    } else {
+        alert('Please enter an API key.');
+    }
+}
+
+// Clear API Key
+function clearApiKey() {
+    localStorage.removeItem('openrouter_api_key');
+    apiKeyInput.value = '';
+    alert('API key removed.');
+}
+
+// Event Listeners for Settings
+settingsBtn.addEventListener('click', openSettings);
+settingsBackBtn.addEventListener('click', closeSettings);
+saveApiKeyBtn.addEventListener('click', saveApiKey);
+clearApiKeyBtn.addEventListener('click', clearApiKey);
+
 
 // -------- EXPORT MARKDOWN --------
 document.getElementById("export-md-btn").onclick = () => {

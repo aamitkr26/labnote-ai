@@ -36,7 +36,10 @@
         <div id="note-list-view" class="view active">
             <header>
                 <h1>Lab Notebook</h1>
-                <button id="new-note-btn" class="primary-btn">+ New Note</button>
+                <div style="display: flex; gap: 10px;">
+                    <button id="settings-btn" class="secondary-btn">Settings</button>
+                    <button id="new-note-btn" class="primary-btn">+ New Note</button>
+                </div>
             </header>
             <div id="notes-list" class="notes-container">
                 <!-- Notes will be injected here by JS -->
@@ -115,7 +118,58 @@
                 </div>
             </div>
         </div>
+
+        <!-- Settings View -->
+        <div id="settings-view" class="view hidden">
+            <header>
+                <button id="settings-back-btn" class="secondary-btn">← Back</button>
+                <h1>Settings</h1>
+            </header>
+            <div class="settings-content" style="padding: 20px; max-width: 500px; margin: 0 auto;">
+                <div class="form-group">
+                    <label for="api-key-input">OpenRouter API Key</label>
+                    <input type="password" id="api-key-input" class="note-input" placeholder="sk-or-...">
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Your API key is stored locally in your browser.</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button id="save-api-key-btn" class="primary-btn">Save</button>
+                    <button id="clear-api-key-btn" class="danger-btn">Clear Key</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- AI Assistance Modal -->
+    <div id="ai-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="background: white; padding: 20px; margin: 10vh auto; width: 90%; max-width: 500px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <h2 style="margin-top: 0;">AI Assistance</h2>
+
+            <div class="form-group">
+                <label for="ai-prompt">Prompt</label>
+                <textarea id="ai-prompt" class="note-input" placeholder="Ask AI for help..." style="min-height: 100px; resize: vertical;"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 8px;">Include Context:</label>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <label style="font-weight: normal; display: flex; align-items: center; gap: 4px;"><input type="checkbox" value="objective"> Objective</label>
+                    <label style="font-weight: normal; display: flex; align-items: center; gap: 4px;"><input type="checkbox" value="materials"> Materials</label>
+                    <label style="font-weight: normal; display: flex; align-items: center; gap: 4px;"><input type="checkbox" value="procedure"> Procedure</label>
+                    <label style="font-weight: normal; display: flex; align-items: center; gap: 4px;"><input type="checkbox" value="observations"> Observations</label>
+                    <label style="font-weight: normal; display: flex; align-items: center; gap: 4px;"><input type="checkbox" value="results"> Results</label>
+                    <label style="font-weight: normal; display: flex; align-items: center; gap: 4px;"><input type="checkbox" value="conclusion"> Conclusion</label>
+                    <label style="font-weight: normal; display: flex; align-items: center; gap: 4px;"><input type="checkbox" value="notes"> Notes / Errors</label>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button class="secondary-btn" onclick="document.getElementById('ai-modal').style.display='none'">Close</button>
+                <button id="ai-generate-btn" class="primary-btn">Generate</button>
+                <button id="ai-apply-btn" class="primary-btn">Apply</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
