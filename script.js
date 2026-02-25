@@ -222,7 +222,7 @@ aiGenerateBtn.addEventListener('click', async () => {
 
     const apiKey = localStorage.getItem('openrouter_api_key');
     if (!apiKey) {
-        alert('OpenRouter API key not found in localStorage (key: "openrouter_api_key").');
+        alert('Please add your OpenRouter API key in Settings.');
         return;
     }
 
